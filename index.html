@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f7f8f6" />
-  <meta name="description" content="อ่านไฟล์ต้นทางในเบราว์เซอร์และตรวจค่าที่พบในโค้ดโดยไม่อัปโหลดข้อมูล" />
+  <meta name="description" content="อ่านไฟล์ต้นทางในเบราว์เซอร์แล้วอัปเดตข้อมูลในโค้ดโดยไม่อัปโหลดข้อมูล" />
   <title>Skill Update FS · ประมวลผลในเบราว์เซอร์</title>
   <style>
     :root{color-scheme:light;--ink:#202c29;--muted:#74807c;--line:#e4e9e6;--paper:#f7f8f6;--green:#0a765d;--green-dark:#075944;--mint:#e9f3ee;--white:#fff;--soft:#fbfcfb;--shadow:0 12px 36px #1f342a08}
@@ -24,8 +24,8 @@
     <section class="intro" aria-labelledby="page-title">
       <div class="eyebrow">Investor Relations · Source-file updates</div>
       <h1 id="page-title">อัปเดตโค้ดจากไฟล์ต้นทาง</h1>
-      <p>เลือกไฟล์ต้นทางและวางโค้ดเดิม ระบบจะอ่านไฟล์ในเบราว์เซอร์และตรวจหาค่าจากไฟล์ที่ปรากฏในโค้ด</p>
-      <div class="steps" aria-label="ขั้นตอนการทำงาน"><span class="step active"><b>1</b> เลือกไฟล์</span><span class="step-line"></span><span class="step"><b>2</b> ตรวจโค้ด</span><span class="step-line"></span><span class="step"><b>3</b> ดูรายงาน</span></div>
+      <p>เลือกไฟล์ต้นทางและวางโค้ดเดิม ระบบจะนำค่าจากไฟล์มาแทนข้อมูลในตารางหรือเนื้อหาในโค้ด โดยประมวลผลทั้งหมดในเบราว์เซอร์</p>
+      <div class="steps" aria-label="ขั้นตอนการทำงาน"><span class="step active"><b>1</b> เลือกไฟล์</span><span class="step-line"></span><span class="step"><b>2</b> อัปเดตโค้ด</span><span class="step-line"></span><span class="step"><b>3</b> คัดลอกผลลัพธ์</span></div>
     </section>
     <section class="workspace" aria-label="พื้นที่อัปเดตโค้ด">
       <article class="panel" aria-labelledby="input-title">
@@ -39,16 +39,16 @@
           </div>
           <div class="field"><label for="source-file">ไฟล์ต้นทาง</label><label class="upload" for="source-file"><input id="source-file" type="file" accept=".xlsx,.csv,.tsv,.docx"><span class="filebox"><span class="file-icon">FILE</span><span><span class="file-name" id="file-name">เลือกไฟล์ข้อมูลจากเครื่อง</span><span class="file-sub">รองรับ XLSX, CSV/TSV และ DOCX · อ่านไฟล์ในเบราว์เซอร์</span></span></span></label><div class="hint" id="source-status" role="status" aria-live="polite">ข้อมูลในไฟล์จะไม่ถูกอัปโหลด</div></div>
           <div class="privacy"><strong>ประมวลผลในเบราว์เซอร์</strong>อ่านและตรวจไฟล์บนเครื่องของคุณเท่านั้น · ไม่มีการเชื่อมต่อ API หรืออัปโหลดข้อมูล</div>
-          <div class="actions"><button class="btn primary" id="update-code" type="button">อ่านไฟล์และตรวจโค้ด</button><button class="btn quiet" id="clear" type="button">ล้างข้อมูล</button><span class="status" id="form-status" role="status" aria-live="polite"></span></div>
+          <div class="actions"><button class="btn primary" id="update-code" type="button">อัปเดตโค้ดจากไฟล์</button><button class="btn quiet" id="clear" type="button">ล้างข้อมูล</button><span class="status" id="form-status" role="status" aria-live="polite"></span></div>
         </div>
       </article>
       <article class="panel" aria-labelledby="result-title">
-        <div class="panel-head"><h2 id="result-title">ผลการตรวจ</h2><span class="kicker">02 · OUTPUT</span></div>
+        <div class="panel-head"><h2 id="result-title">โค้ดที่อัปเดตแล้ว</h2><span class="kicker">02 · OUTPUT</span></div>
         <div class="panel-body output-stack">
-          <div class="field output-field"><label for="html-result">HTML / Vue (ผลตรวจ)</label><textarea id="html-result" placeholder="ผลตรวจ HTML/Vue จะแสดงที่นี่" readonly></textarea><div class="output-tools"><span class="hint">แสดงโค้ดเดิมเพื่อคัดลอกหลังตรวจ</span><button class="btn copy" data-copy="html-result" disabled>คัดลอก HTML</button></div></div>
-          <div class="field output-field"><label for="js-result">JavaScript (ผลตรวจ)</label><textarea id="js-result" placeholder="ผลตรวจ JavaScript จะแสดงที่นี่" readonly></textarea><div class="output-tools"><span class="hint">แสดงโค้ดเดิมเพื่อคัดลอกหลังตรวจ</span><button class="btn copy" data-copy="js-result" disabled>คัดลอก JavaScript</button></div></div>
-          <div class="field output-field report"><label for="report-result">รายงานการตรวจ</label><textarea id="report-result" placeholder="ค่าจากไฟล์ที่พบในโค้ดจะแสดงที่นี่" readonly></textarea></div>
-          <div class="system-status"><strong>การทำงาน</strong><span>ไฟล์ XLSX, CSV/TSV และ DOCX ถูกอ่านในเบราว์เซอร์ · รายงานค่าจากไฟล์ที่พบในโค้ด</span></div>
+          <div class="field output-field"><label for="html-result">HTML / Vue (อัปเดตแล้ว)</label><textarea id="html-result" placeholder="โค้ด HTML/Vue ที่อัปเดตแล้วจะแสดงที่นี่" readonly></textarea><div class="output-tools"><span class="hint">คัดลอกโค้ดฉบับอัปเดตไปแทนโค้ดเดิม</span><button class="btn copy" data-copy="html-result" disabled>คัดลอก HTML</button></div></div>
+          <div class="field output-field"><label for="js-result">JavaScript (อัปเดตแล้ว)</label><textarea id="js-result" placeholder="โค้ด JavaScript ที่อัปเดตแล้วจะแสดงที่นี่" readonly></textarea><div class="output-tools"><span class="hint">คัดลอกโค้ดฉบับอัปเดตไปแทนโค้ดเดิม</span><button class="btn copy" data-copy="js-result" disabled>คัดลอก JavaScript</button></div></div>
+          <div class="field output-field report"><label for="report-result">สรุปการอัปเดต</label><textarea id="report-result" placeholder="สรุปข้อมูลที่แทนลงในโค้ดจะแสดงที่นี่" readonly></textarea></div>
+          <div class="system-status"><strong>การทำงาน</strong><span>อ่านไฟล์และแทนข้อมูลในตาราง HTML ตามชื่อรายการที่ตรงกันในเบราว์เซอร์ · ไม่มีการเชื่อมต่อ API หรืออัปโหลดข้อมูล</span></div>
         </div>
       </article>
     </section>
@@ -119,6 +119,68 @@
       if(data.kind==='docx')return data.paragraphs.map((value,index)=>({where:`ย่อหน้า ${index+1}`,value:String(value)}));
       return data.rows.flatMap((row,rowIndex)=>row.map((value,columnIndex)=>({where:`${columnLabel(columnIndex)}${rowIndex+1}`,value:String(value??'')})));
     }
+    const plainText=(value)=>{const node=document.createElement('div');node.innerHTML=value;return(node.textContent||'').replace(/\s+/g,' ').trim();};
+    const normalizeLabel=(value)=>plainText(String(value??'')).toLocaleLowerCase().replace(/[\s\u00a0]+/g,' ').replace(/[：:]/g,'').trim();
+    function sourceGrids(data){
+      if(data.kind==='xlsx')return data.sheets.map(sheet=>({name:sheet.name,rows:sheet.rows.map(row=>{const cells=[];for(const cell of row.cells){const match=cell.ref.match(/^[A-Z]+/i);if(!match)continue;let col=0;for(const ch of match[0].toUpperCase())col=col*26+ch.charCodeAt(0)-64;cells[col-1]=String(cell.value??'');}return cells;} )}));
+      if(data.kind==='table')return [{name:'ไฟล์ต้นทาง',rows:data.rows}];
+      return [];
+    }
+    function updateHtmlTables(source,html){
+      if(!html.trim())return {code:html,changes:[],unmatched:[]};
+      const sourceRows=sourceGrids(source).flatMap(sheet=>sheet.rows.map((cells,index)=>({sheet:sheet.name,index,cells})).filter(row=>row.cells.length>1&&String(row.cells[0]??'').trim()));
+      const changes=[],matched=new Set();
+      const code=html.replace(/<tr\b([^>]*)>([\s\S]*?)<\/tr>/gi,(row,attrs,inner)=>{
+        const cells=[...inner.matchAll(/<(td|th)\b([^>]*)>([\s\S]*?)<\/\1>/gi)];if(cells.length<2)return row;
+        const label=normalizeLabel(cells[0][3]);if(!label)return row;
+        const sourceRow=sourceRows.find(item=>normalizeLabel(item.cells[0])===label);if(!sourceRow)return row;
+        matched.add(sourceRow);let updated=inner;let offset=0;
+        for(let index=1;index<cells.length&&index<sourceRow.cells.length;index++){
+          const cell=cells[index],value=String(sourceRow.cells[index]??'');if(!value.trim())continue;
+          const existing=cell[3],formatted=formatLike(value,plainText(existing));
+          const replacement=replaceCellValue(existing,formatted);
+          if(replacement===existing)continue;
+          const start=cell.index+cell[0].indexOf('>')+1,end=cell.index+cell[0].lastIndexOf('</');
+          const from=start+offset,to=end+offset;updated=updated.slice(0,from)+replacement+updated.slice(to);offset+=replacement.length-existing.length;
+          changes.push({label:plainText(cells[0][3]),old:plainText(existing),value:formatted,source:`${sourceRow.sheet} แถว ${sourceRow.index+1}`});
+        }
+        return `<tr${attrs}>${updated}</tr>`;
+      });
+      return {code,changes,unmatched:sourceRows.filter(row=>!matched.has(row)).map(row=>String(row.cells[0]??''))};
+    }
+    function updateJsChartRows(source,js){
+      const rows=sourceGrids(source).flatMap(sheet=>sheet.rows.map((cells,index)=>({sheet:sheet.name,index,cells})).filter(row=>row.cells.length>1&&String(row.cells[0]??'').trim())),changes=[];
+      const code=js.replace(/((?:name|label)\s*:\s*)(['"])([^'"]+)\2([\s\S]{0,300}?\bdata\s*:\s*)\[([^\]]*)\]/gi,(match,prefix,quote,label,dataPrefix,oldArray)=>{
+        const row=rows.find(item=>normalizeLabel(item.cells[0])===normalizeLabel(label));if(!row)return match;
+        const values=row.cells.slice(1).map(value=>String(value??'').trim()).filter(Boolean);if(!values.length)return match;
+        const next=values.map(value=>/^[-+]?\d+(?:\.\d+)?$/.test(value.replace(/,/g,''))?value.replace(/,/g,''):JSON.stringify(value)).join(', ');
+        if(next===oldArray.trim())return match;
+        changes.push({label,old:oldArray.trim(),value:next,source:`${row.sheet} แถว ${row.index+1}`});return `${prefix}${quote}${label}${quote}${dataPrefix}[${next}]`;
+      });
+      return {code,changes};
+    }
+    function updateDocxParagraphs(source,html){
+      const paragraphs=source.paragraphs||[];const matches=[...html.matchAll(/<p\b([^>]*)>([\s\S]*?)<\/p>/gi)];
+      if(!paragraphs.length||matches.length!==paragraphs.length)return {code:html,changes:[],message:`ไฟล์ Word มี ${paragraphs.length} ย่อหน้า แต่โค้ดมี ${matches.length} แท็ก <p> จึงยังไม่แทนข้อความเพื่อป้องกันการเลื่อนเนื้อหา`};
+      let code=html,offset=0;const changes=[];
+      matches.forEach((match,index)=>{const old=match[2],value=escapeHtml(paragraphs[index]);const start=match.index+match[0].indexOf('>')+1+offset,end=match.index+match[0].lastIndexOf('</')+offset;code=code.slice(0,start)+value+code.slice(end);offset+=value.length-old.length;if(plainText(old)!==paragraphs[index])changes.push({label:`ย่อหน้า ${index+1}`,old:plainText(old),value:paragraphs[index],source:`ไฟล์ Word ย่อหน้า ${index+1}`});});
+      return {code,changes};
+    }
+    const escapeHtml=(value)=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    function formatLike(value,oldValue){
+      const raw=String(value).trim(),old=String(oldValue).trim();
+      if(!raw||!/^[-+]?\d[\d,]*(?:\.\d+)?%?$/.test(raw.replace(/\s/g,'')))return raw;
+      const number=Number(raw.replace(/,/g,'').replace(/%$/,''));if(!Number.isFinite(number))return raw;
+      if(old.endsWith('%')&&!raw.endsWith('%'))return `${number}%`;
+      const decimals=(old.match(/\.(\d+)/)||[])[1]?.length;if(decimals!==undefined)return number.toLocaleString('en-US',{minimumFractionDigits:decimals,maximumFractionDigits:Math.max(decimals,6)});
+      if(old.includes(',')||Math.abs(number)>=1000)return number.toLocaleString('en-US',{maximumFractionDigits:6});
+      return raw;
+    }
+    function replaceCellValue(inner,value){
+      if(/<counter-number\b/i.test(inner))return inner.replace(/(:number|number|:value|value)=(['"])[^'"]*\2/i,(_match,attr,quote)=>`${attr}=${quote}${value}${quote}`).replace(/(<counter-number\b[^>]*>)[\s\S]*?(<\/counter-number>)/i,(_match,open,close)=>`${open}${value}${close}`);
+      if(/<[^>]+>/.test(inner))return inner.replace(/>([^<>]*)</,(_match,left,right)=>`>${value}<`);
+      return value;
+    }
     sourceInput.addEventListener('change',async event=>{
       sourceFile=event.target.files[0]||null;sourceData=null;
       if(!sourceFile){setSourceStatus('ข้อมูลในไฟล์จะไม่ถูกอัปโหลด');return;}
@@ -135,13 +197,18 @@
     });
     document.querySelector('#update-code').addEventListener('click',()=>{
       if(!sourceFile||!sourceData){formStatus.textContent='เลือกไฟล์ต้นทางที่อ่านได้ก่อน';return;}
-      const html=htmlCode.value,js=jsCode.value;
-      const matches=collectSourceValues(sourceData).filter(item=>item.value.trim().length>1&&(html.includes(item.value)||js.includes(item.value))).slice(0,200);
-      const htmlMatches=matches.filter(item=>html.includes(item.value)).length;const jsMatches=matches.filter(item=>js.includes(item.value)).length;
-      document.querySelector('#html-result').value=html;document.querySelector('#js-result').value=js;
+      const task=document.querySelector('#work-type').selectedOptions[0].textContent;
+      let htmlResult,jsResult,htmlChanges=[],jsChanges=[],extra='';
+      if(sourceData.kind==='docx'&&/ข่าวประชาสัมพันธ์|โปรไฟล์กรรมการ/.test(task)){
+        const updated=updateDocxParagraphs(sourceData,htmlCode.value);htmlResult=updated.code;htmlChanges=updated.changes;extra=updated.message||'';jsResult=jsCode.value;
+      }else{
+        const updated=updateHtmlTables(sourceData,htmlCode.value),updatedJs=updateJsChartRows(sourceData,jsCode.value);htmlResult=updated.code;htmlChanges=updated.changes;jsResult=updatedJs.code;jsChanges=updatedJs.changes;
+      }
+      document.querySelector('#html-result').value=htmlResult;document.querySelector('#js-result').value=jsResult;
       document.querySelectorAll('[data-copy]').forEach(button=>button.disabled=false);
-      document.querySelector('#report-result').value=[`ไฟล์ต้นทาง: ${sourceFile.name}`,`ประเภทงาน: ${document.querySelector('#work-type').selectedOptions[0].textContent}`,`ภาษา: ${document.querySelector('#locale').selectedOptions[0].textContent}`,`จำนวนค่าที่พบในโค้ด: ${matches.length}`,`พบใน HTML/Vue: ${htmlMatches} ค่า`,`พบใน JavaScript: ${jsMatches} ค่า`,'',matches.length?`ค่าที่พบ (แสดงไม่เกิน ${matches.length} รายการ):\n${matches.map(item=>`• ${item.where}: ${item.value}`).join('\n')}`:'ไม่พบค่าจากไฟล์ที่ตรงกับข้อความในโค้ด','',`โค้ดในช่องผลตรวจเป็นสำเนาเดิมจากช่องกรอก ระบบไม่ได้แก้ไขค่าอัตโนมัติ`].join('\n');
-      formStatus.textContent='อ่านไฟล์และตรวจโค้ดเสร็จแล้ว';
+      const changes=[...htmlChanges,...jsChanges];
+      document.querySelector('#report-result').value=[`ไฟล์ต้นทาง: ${sourceFile.name}`,`อัปเดตโค้ด ${changes.length} จุด`,...changes.slice(0,100).map(item=>`• ${item.label}: ${item.old} → ${item.value} (${item.source})`),changes.length>100?`แสดง 100 จาก ${changes.length} จุด`:null,extra||null,changes.length?'':'ไม่พบแถวที่อัปเดตได้: ระบบจับคู่ชื่อรายการในคอลัมน์แรกของไฟล์กับแถวในตาราง HTML หรือชุดข้อมูลกราฟ JavaScript กรุณาตรวจชื่อรายการและรูปแบบโค้ดก่อนคัดลอก'].filter(Boolean).join('\n');
+      formStatus.textContent=changes.length?`อัปเดตโค้ดแล้ว ${changes.length} จุด`:'ยังไม่มีจุดที่อัปเดต';
     });
     document.querySelector('#clear').addEventListener('click',()=>{
       document.querySelector('#work-type').selectedIndex=0;document.querySelector('#locale').selectedIndex=0;
