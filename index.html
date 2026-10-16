@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f7f8f6" />
+  <meta name="description" content="อ่านไฟล์ต้นทางในเบราว์เซอร์และตรวจค่าที่พบในโค้ดโดยไม่อัปโหลดข้อมูล" />
+  <title>Skill Update FS · ประมวลผลในเบราว์เซอร์</title>
+  <style>
+    :root{color-scheme:light;--ink:#202c29;--muted:#74807c;--line:#e4e9e6;--paper:#f7f8f6;--green:#0a765d;--green-dark:#075944;--mint:#e9f3ee;--white:#fff;--soft:#fbfcfb;--shadow:0 12px 36px #1f342a08}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 "Segoe UI",Tahoma,sans-serif}button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:transparent}
+    .topbar{height:58px;background:#fff;border-bottom:1px solid var(--line)}.top{max-width:1320px;height:100%;margin:auto;padding:0 26px;display:flex;align-items:center;justify-content:space-between}.brand{display:flex;align-items:center;gap:11px;text-decoration:none;font-size:15px;font-weight:750}.mark{width:32px;height:32px;display:grid;place-items:center;border-radius:9px;background:var(--green);color:#fff;font-size:11px;letter-spacing:.04em}.top-label{padding:5px 11px;border-radius:8px;background:#f2f5f2;color:#64726d;font-size:11px}
+    main{max-width:1320px;margin:auto;padding:0 26px 42px}.intro{padding:36px 0 20px}.eyebrow{color:#537466;font-size:11px;letter-spacing:.1em;font-weight:760;text-transform:uppercase}.intro h1{font-size:clamp(28px,3vw,38px);line-height:1.2;letter-spacing:-.04em;margin:10px 0 7px}.intro p{margin:0;color:var(--muted);font-size:14px;max-width:800px}.steps{display:flex;align-items:center;gap:0;margin-top:22px;max-width:410px}.step{display:flex;align-items:center;gap:8px;color:#8a9490;font-size:11px;white-space:nowrap}.step b{width:23px;height:23px;border-radius:7px;background:#eef1ef;display:grid;place-items:center;font-size:10px}.step.active{color:var(--green);font-weight:700}.step.active b{background:var(--mint);color:var(--green)}.step-line{height:1px;background:#dfe5e1;width:40px;margin:0 12px}
+    .workspace{display:grid;grid-template-columns:1.08fr .92fr;align-items:start;gap:18px}.panel{background:var(--white);border:1px solid var(--line);border-radius:13px;box-shadow:var(--shadow);overflow:hidden}.panel-head{min-height:58px;padding:15px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:14px}.panel-head h2{margin:0;font-size:15px;font-weight:730}.kicker{color:#86918d;font-size:10px;font-weight:730;letter-spacing:.1em;white-space:nowrap}.panel-body{padding:17px 18px 19px}.field{margin-bottom:17px}.field:last-child{margin-bottom:0}label,.field-label{display:block;font-weight:680;font-size:12px;margin-bottom:7px}.hint{font-size:10px;color:#89938f;margin-top:6px}.select,textarea,.filebox,.url-input{width:100%;border:1px solid #dfe5e2;border-radius:8px;background:#fff;color:var(--ink);outline:none}.select,.url-input{height:39px;padding:0 11px}.select:focus,textarea:focus,.url-input:focus{border-color:#7cb39f;box-shadow:0 0 0 3px #e8f4ee}.textareas{display:grid;gap:16px}textarea{resize:vertical;min-height:142px;padding:11px 12px;font:11px/1.55 Consolas,"Courier New",monospace}textarea::placeholder,.url-input::placeholder{color:#a0a9a5}.counter{font-size:10px;color:#89938f;margin-top:5px}.upload{display:block;position:relative}.upload input{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:pointer}.filebox{min-height:61px;padding:10px 12px;display:flex;align-items:center;gap:12px;background:var(--soft)}.file-icon{width:31px;height:34px;border-radius:6px;background:#edf3f6;color:#51718a;display:grid;place-items:center;font-size:9px;font-weight:800}.file-name{font-size:11px;font-weight:650}.file-sub{display:block;color:#88938e;font-size:10px;font-weight:400}.privacy{padding:10px 12px;border:1px solid #e9eeeb;border-radius:8px;background:#fafcfb;color:#718079;font-size:10px}.privacy strong{display:block;color:#35453f;font-size:11px;margin-bottom:2px}.actions{display:flex;align-items:center;gap:9px;margin-top:18px}.btn{min-height:37px;padding:8px 14px;border-radius:8px;border:1px solid transparent;cursor:pointer;font-size:12px;font-weight:700}.btn.primary{background:var(--green);color:#fff}.btn.primary:hover{background:var(--green-dark)}.btn.quiet{background:#fff;border-color:var(--line);color:#52615b}.btn.copy{background:#fff;border-color:var(--line);color:#54625d;padding:6px 10px;min-height:30px;font-size:10px}.btn:disabled{background:#f0f2f1;border-color:#f0f2f1;color:#aab2ae;cursor:not-allowed}.status{font-size:10px;color:var(--muted)}
+    .output-stack{display:grid;gap:17px}.output-field textarea{min-height:150px;background:#fcfdfc}.output-field.report textarea{min-height:95px}.output-tools{display:flex;align-items:center;justify-content:space-between;margin-top:6px}.output-tools .hint{margin:0}.system-status{padding:11px 12px;border:1px solid #e9eeeb;border-radius:8px;background:#fafcfb;color:#74817b;font-size:10px}.system-status strong{display:block;color:#34453e;font-size:11px;margin-bottom:2px}.footer{display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;border-top:1px solid var(--line);margin-top:22px;padding-top:15px;color:#87918d;font-size:10px}.footer a{color:var(--green);text-decoration:none}
+    @media(max-width:850px){main{padding:0 18px 32px}.top{padding:0 18px}.workspace{grid-template-columns:1fr}.intro{padding-top:29px}.output-stack{gap:14px}}
+    @media(max-width:560px){main{padding:0 12px 28px}.top{padding:0 12px}.intro{padding-top:25px}.intro h1{font-size:28px}.panel-head{padding:13px 14px}.panel-body{padding:14px}.steps{max-width:100%}.step-line{width:22px;margin:0 7px}.actions{flex-wrap:wrap}.actions .status{width:100%}.footer{display:grid;gap:5px}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  </style>
+</head>
+<body>
+  <header class="topbar"><div class="top"><a class="brand" href="#top"><span class="mark">IR</span><span>Skill Update FS</span></a><span class="top-label">ประมวลผลในเบราว์เซอร์</span></div></header>
+  <main id="top">
+    <section class="intro" aria-labelledby="page-title">
+      <div class="eyebrow">Investor Relations · Source-file updates</div>
+      <h1 id="page-title">อัปเดตโค้ดจากไฟล์ต้นทาง</h1>
+      <p>เลือกไฟล์ต้นทางและวางโค้ดเดิม ระบบจะอ่านไฟล์ในเบราว์เซอร์และตรวจหาค่าจากไฟล์ที่ปรากฏในโค้ด</p>
+      <div class="steps" aria-label="ขั้นตอนการทำงาน"><span class="step active"><b>1</b> เลือกไฟล์</span><span class="step-line"></span><span class="step"><b>2</b> ตรวจโค้ด</span><span class="step-line"></span><span class="step"><b>3</b> ดูรายงาน</span></div>
+    </section>
+    <section class="workspace" aria-label="พื้นที่อัปเดตโค้ด">
+      <article class="panel" aria-labelledby="input-title">
+        <div class="panel-head"><h2 id="input-title">ข้อมูลต้นทางและโค้ดปัจจุบัน</h2><span class="kicker">01 · INPUT</span></div>
+        <div class="panel-body">
+          <div class="field"><label for="work-type">ประเภทงาน</label><select class="select" id="work-type"><option>Financial Highlights / Homepage KPI</option><option>ผู้ถือหุ้นและกราฟ</option><option>ข่าวประชาสัมพันธ์</option><option>โปรไฟล์กรรมการ</option><option>ตรวจหน้า UAT / Live เทียบไฟล์</option></select></div>
+          <div class="field"><label for="locale">ภาษาของหน้าเว็บ</label><select class="select" id="locale"><option>ไทย (TH)</option><option>English (EN)</option><option>ไทยและอังกฤษ (TH + EN)</option></select></div>
+          <div class="textareas">
+            <div class="field"><label for="html-code">HTML / Vue ปัจจุบัน</label><textarea id="html-code" placeholder="วางโค้ด HTML หรือ Vue ที่ต้องการอัปเดต"></textarea><div class="counter"><span id="html-count">0</span> ตัวอักษร · ระบบไม่รันโค้ดที่วาง</div></div>
+            <div class="field"><label for="javascript-code">JavaScript (ถ้ามี)</label><textarea id="javascript-code" placeholder="วาง JavaScript เช่น window.chart หรือข้อมูล script ที่เกี่ยวข้อง"></textarea><div class="counter"><span id="js-count">0</span> ตัวอักษร · ระบบไม่รันโค้ดที่วาง</div></div>
+          </div>
+          <div class="field"><label for="source-file">ไฟล์ต้นทาง</label><label class="upload" for="source-file"><input id="source-file" type="file" accept=".xlsx,.csv,.tsv,.docx"><span class="filebox"><span class="file-icon">FILE</span><span><span class="file-name" id="file-name">เลือกไฟล์ข้อมูลจากเครื่อง</span><span class="file-sub">รองรับ XLSX, CSV/TSV และ DOCX · อ่านไฟล์ในเบราว์เซอร์</span></span></span></label><div class="hint" id="source-status" role="status" aria-live="polite">ข้อมูลในไฟล์จะไม่ถูกอัปโหลด</div></div>
+          <div class="privacy"><strong>ประมวลผลในเบราว์เซอร์</strong>อ่านและตรวจไฟล์บนเครื่องของคุณเท่านั้น · ไม่มีการเชื่อมต่อ API หรืออัปโหลดข้อมูล</div>
+          <div class="actions"><button class="btn primary" id="update-code" type="button">อ่านไฟล์และตรวจโค้ด</button><button class="btn quiet" id="clear" type="button">ล้างข้อมูล</button><span class="status" id="form-status" role="status" aria-live="polite"></span></div>
+        </div>
+      </article>
+      <article class="panel" aria-labelledby="result-title">
+        <div class="panel-head"><h2 id="result-title">ผลการตรวจ</h2><span class="kicker">02 · OUTPUT</span></div>
+        <div class="panel-body output-stack">
+          <div class="field output-field"><label for="html-result">HTML / Vue (ผลตรวจ)</label><textarea id="html-result" placeholder="ผลตรวจ HTML/Vue จะแสดงที่นี่" readonly></textarea><div class="output-tools"><span class="hint">แสดงโค้ดเดิมเพื่อคัดลอกหลังตรวจ</span><button class="btn copy" data-copy="html-result" disabled>คัดลอก HTML</button></div></div>
+          <div class="field output-field"><label for="js-result">JavaScript (ผลตรวจ)</label><textarea id="js-result" placeholder="ผลตรวจ JavaScript จะแสดงที่นี่" readonly></textarea><div class="output-tools"><span class="hint">แสดงโค้ดเดิมเพื่อคัดลอกหลังตรวจ</span><button class="btn copy" data-copy="js-result" disabled>คัดลอก JavaScript</button></div></div>
+          <div class="field output-field report"><label for="report-result">รายงานการตรวจ</label><textarea id="report-result" placeholder="ค่าจากไฟล์ที่พบในโค้ดจะแสดงที่นี่" readonly></textarea></div>
+          <div class="system-status"><strong>การทำงาน</strong><span>ไฟล์ XLSX, CSV/TSV และ DOCX ถูกอ่านในเบราว์เซอร์ · รายงานค่าจากไฟล์ที่พบในโค้ด</span></div>
+        </div>
+      </article>
+    </section>
+    <footer class="footer"><span>Skill Update FS · ตรวจ source ก่อนแก้โค้ด · รักษาโครงสร้าง CMS</span><a href="https://github.com/Thanakon-KN/skill-update-fs" target="_blank" rel="noopener noreferrer">ดู Skill บน GitHub ↗</a></footer>
+  </main>
+  <script>
+    const htmlCode=document.querySelector('#html-code');
+    const jsCode=document.querySelector('#javascript-code');
+    const formStatus=document.querySelector('#form-status');
+    let sourceFile=null;
+    let sourceData=null;
+    htmlCode.addEventListener('input',()=>document.querySelector('#html-count').textContent=htmlCode.value.length.toLocaleString('th-TH'));
+    jsCode.addEventListener('input',()=>document.querySelector('#js-count').textContent=jsCode.value.length.toLocaleString('th-TH'));
+    const sourceInput=document.querySelector('#source-file');
+    const sourceStatus=document.querySelector('#source-status');
+    const setSourceStatus=(message,isError=false)=>{sourceStatus.textContent=message;sourceStatus.style.color=isError?'#a33d35':'';};
+    const xmlText=(node)=>Array.from(node.querySelectorAll('*')).filter(el=>el.localName==='t').map(el=>el.textContent||'').join('');
+    const parseXml=(text)=>{const xml=new DOMParser().parseFromString(text,'application/xml');if(xml.querySelector('parsererror'))throw new Error('โครงสร้าง XML ในไฟล์ไม่ถูกต้อง');return xml;};
+    function parseDelimited(text,delimiter){
+      const rows=[];let row=[],cell='',quoted=false;
+      for(let i=0;i<text.length;i++){
+        const ch=text[i];
+        if(quoted){if(ch==='"'&&text[i+1]==='"'){cell+='"';i++;}else if(ch==='"')quoted=false;else cell+=ch;}
+        else if(ch==='"'&&cell==='')quoted=true;
+        else if(ch===delimiter){row.push(cell);cell='';}
+        else if(ch==='\n'){row.push(cell.replace(/\r$/,''));rows.push(row);row=[];cell='';}
+        else cell+=ch;
+      }
+      if(cell!==''||row.length){row.push(cell.replace(/\r$/,''));rows.push(row);}
+      return rows.filter(cells=>cells.some(value=>value!==''));
+    }
+    async function unzip(file){
+      const bytes=new Uint8Array(await file.arrayBuffer());const view=new DataView(bytes.buffer,bytes.byteOffset,bytes.byteLength);
+      let end=-1;for(let i=bytes.length-22;i>=Math.max(0,bytes.length-65557);i--){if(view.getUint32(i,true)===0x06054b50){end=i;break;}}
+      if(end<0)throw new Error('ไฟล์นี้ไม่ใช่ ZIP/XLSX/DOCX ที่รองรับ');
+      const count=view.getUint16(end+10,true);let offset=view.getUint32(end+16,true);const entries=new Map();const decoder=new TextDecoder();
+      for(let i=0;i<count;i++){
+        if(view.getUint32(offset,true)!==0x02014b50)throw new Error('อ่านสารบัญไฟล์ ZIP ไม่ได้');
+        const method=view.getUint16(offset+10,true),compressedSize=view.getUint32(offset+20,true),nameLength=view.getUint16(offset+28,true),extraLength=view.getUint16(offset+30,true),commentLength=view.getUint16(offset+32,true),localOffset=view.getUint32(offset+42,true);
+        const name=decoder.decode(bytes.subarray(offset+46,offset+46+nameLength));
+        const localNameLength=view.getUint16(localOffset+26,true),localExtraLength=view.getUint16(localOffset+28,true),dataStart=localOffset+30+localNameLength+localExtraLength;
+        const compressed=bytes.slice(dataStart,dataStart+compressedSize);let content;
+        if(method===0)content=compressed;
+        else if(method===8){if(!('DecompressionStream'in window))throw new Error('เบราว์เซอร์นี้ยังไม่รองรับการอ่านไฟล์บีบอัด');const stream=new Blob([compressed]).stream().pipeThrough(new DecompressionStream('deflate-raw'));content=new Uint8Array(await new Response(stream).arrayBuffer());}
+        else throw new Error(`ไฟล์ ZIP ใช้วิธีบีบอัดที่ไม่รองรับ (${method})`);
+        entries.set(name,decoder.decode(content));offset+=46+nameLength+extraLength+commentLength;
+      }
+      return entries;
+    }
+    const normalizePath=(path)=>{const parts=[];for(const item of path.replace(/^\//,'').split('/')){if(item==='..')parts.pop();else if(item&&item!=='.')parts.push(item);}return parts.join('/');};
+    function columnLabel(number){let label='';for(let n=number+1;n>0;n=Math.floor((n-1)/26))label=String.fromCharCode(65+(n-1)%26)+label;return label;}
+    async function readXlsx(file){
+      const zip=await unzip(file);const workbook=parseXml(zip.get('xl/workbook.xml')||'');const rels=parseXml(zip.get('xl/_rels/workbook.xml.rels')||'');
+      const relMap=new Map(Array.from(rels.getElementsByTagName('Relationship')).map(r=>{const target=r.getAttribute('Target');return [r.getAttribute('Id'),normalizePath(target.startsWith('/')?target:`xl/${target}`)];}));
+      const sharedXml=zip.get('xl/sharedStrings.xml');const shared=sharedXml?Array.from(parseXml(sharedXml).getElementsByTagName('si')).map(xmlText):[];
+      const sheets=[];
+      for(const sheet of Array.from(workbook.getElementsByTagName('sheet'))){
+        const id=sheet.getAttributeNS('http://schemas.openxmlformats.org/officeDocument/2006/relationships','id')||sheet.getAttribute('r:id');const path=relMap.get(id);if(!path)continue;
+        const sheetXml=zip.get(path);if(!sheetXml)continue;const xml=parseXml(sheetXml);const rows=[];
+        for(const row of Array.from(xml.getElementsByTagName('row'))){const cells=[];for(const cell of Array.from(row.getElementsByTagName('c'))){const ref=cell.getAttribute('r');const valueNode=cell.getElementsByTagName('v')[0];let value=valueNode?.textContent||'';if(cell.getAttribute('t')==='s')value=shared[Number(value)]??value;else if(cell.getAttribute('t')==='inlineStr')value=xmlText(cell);else if(cell.getAttribute('t')==='b')value=value==='1'?'TRUE':'FALSE';if(value===''){const formula=cell.getElementsByTagName('f')[0]?.textContent; if(formula)value=`=${formula}`;}cells.push({ref,value});}if(cells.length)rows.push({number:row.getAttribute('r'),cells});}
+        sheets.push({name:sheet.getAttribute('name')||'Sheet',rows});
+      }
+      if(!sheets.length)throw new Error('ไม่พบ worksheet ในไฟล์ XLSX');return {kind:'xlsx',sheets};
+    }
+    async function readDocx(file){const zip=await unzip(file);const content=zip.get('word/document.xml');if(!content)throw new Error('ไม่พบเนื้อหาเอกสาร Word');const xml=parseXml(content);const paragraphs=Array.from(xml.getElementsByTagNameNS('*','p')).map(p=>xmlText(p)).filter(Boolean);return {kind:'docx',paragraphs};}
+    function collectSourceValues(data){
+      if(data.kind==='xlsx')return data.sheets.flatMap(sheet=>sheet.rows.flatMap(row=>row.cells.map(cell=>({where:`${sheet.name}!${cell.ref}`,value:String(cell.value??'')}))));
+      if(data.kind==='docx')return data.paragraphs.map((value,index)=>({where:`ย่อหน้า ${index+1}`,value:String(value)}));
+      return data.rows.flatMap((row,rowIndex)=>row.map((value,columnIndex)=>({where:`${columnLabel(columnIndex)}${rowIndex+1}`,value:String(value??'')})));
+    }
+    sourceInput.addEventListener('change',async event=>{
+      sourceFile=event.target.files[0]||null;sourceData=null;
+      if(!sourceFile){setSourceStatus('ข้อมูลในไฟล์จะไม่ถูกอัปโหลด');return;}
+      document.querySelector('#file-name').textContent=sourceFile.name;setSourceStatus('กำลังอ่านไฟล์ในเบราว์เซอร์…');
+      if(sourceFile.size>20*1024*1024){sourceInput.value='';sourceFile=null;document.querySelector('#file-name').textContent='เลือกไฟล์ข้อมูลจากเครื่อง';setSourceStatus('ไฟล์เกิน 20 MB',true);return;}
+      try{
+        const extension=sourceFile.name.split('.').pop().toLowerCase();
+        if(extension==='xlsx')sourceData=await readXlsx(sourceFile);
+        else if(extension==='docx')sourceData=await readDocx(sourceFile);
+        else if(extension==='csv'||extension==='tsv'){const text=(await sourceFile.text()).replace(/^\uFEFF/,'');sourceData={kind:'table',rows:parseDelimited(text,extension==='tsv'?'\t':',')};}
+        else throw new Error('รองรับเฉพาะ XLSX, CSV, TSV และ DOCX');
+        setSourceStatus(`อ่านไฟล์แล้วในเครื่อง · ${(sourceFile.size/1024/1024).toFixed(2)} MB · ${sourceData.kind==='xlsx'?`${sourceData.sheets.length} sheet`:sourceData.kind==='docx'?`${sourceData.paragraphs.length} ย่อหน้า`:`${sourceData.rows.length} แถว`}`);
+      }catch(error){sourceData=null;setSourceStatus(`อ่านไฟล์ไม่ได้: ${error.message}`,true);}
+    });
+    document.querySelector('#update-code').addEventListener('click',()=>{
+      if(!sourceFile||!sourceData){formStatus.textContent='เลือกไฟล์ต้นทางที่อ่านได้ก่อน';return;}
+      const html=htmlCode.value,js=jsCode.value;
+      const matches=collectSourceValues(sourceData).filter(item=>item.value.trim().length>1&&(html.includes(item.value)||js.includes(item.value))).slice(0,200);
+      const htmlMatches=matches.filter(item=>html.includes(item.value)).length;const jsMatches=matches.filter(item=>js.includes(item.value)).length;
+      document.querySelector('#html-result').value=html;document.querySelector('#js-result').value=js;
+      document.querySelectorAll('[data-copy]').forEach(button=>button.disabled=false);
+      document.querySelector('#report-result').value=[`ไฟล์ต้นทาง: ${sourceFile.name}`,`ประเภทงาน: ${document.querySelector('#work-type').selectedOptions[0].textContent}`,`ภาษา: ${document.querySelector('#locale').selectedOptions[0].textContent}`,`จำนวนค่าที่พบในโค้ด: ${matches.length}`,`พบใน HTML/Vue: ${htmlMatches} ค่า`,`พบใน JavaScript: ${jsMatches} ค่า`,'',matches.length?`ค่าที่พบ (แสดงไม่เกิน ${matches.length} รายการ):\n${matches.map(item=>`• ${item.where}: ${item.value}`).join('\n')}`:'ไม่พบค่าจากไฟล์ที่ตรงกับข้อความในโค้ด','',`โค้ดในช่องผลตรวจเป็นสำเนาเดิมจากช่องกรอก ระบบไม่ได้แก้ไขค่าอัตโนมัติ`].join('\n');
+      formStatus.textContent='อ่านไฟล์และตรวจโค้ดเสร็จแล้ว';
+    });
+    document.querySelector('#clear').addEventListener('click',()=>{
+      document.querySelector('#work-type').selectedIndex=0;document.querySelector('#locale').selectedIndex=0;
+      htmlCode.value='';jsCode.value='';document.querySelector('#source-file').value='';sourceFile=null;sourceData=null;
+      document.querySelector('#html-result').value='';document.querySelector('#js-result').value='';document.querySelector('#report-result').value='';document.querySelectorAll('[data-copy]').forEach(button=>button.disabled=true);
+      document.querySelector('#file-name').textContent='เลือกไฟล์ข้อมูลจากเครื่อง';setSourceStatus('ข้อมูลในไฟล์จะไม่ถูกอัปโหลด');
+      document.querySelector('#html-count').textContent='0';document.querySelector('#js-count').textContent='0';formStatus.textContent='ล้างข้อมูลแล้ว';
+    });
+    document.querySelectorAll('[data-copy]').forEach(button=>button.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(document.querySelector(`#${button.dataset.copy}`).value);formStatus.textContent='คัดลอกโค้ดแล้ว';}catch{formStatus.textContent='คัดลอกไม่สำเร็จ กรุณาเลือกข้อความแล้วกด Ctrl+C';}}));
+  </script>
+</body>
+</html>
