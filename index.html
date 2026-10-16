@@ -4,8 +4,8 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#f7f8f6" />
-  <meta name="description" content="อ่านไฟล์ต้นทางในเบราว์เซอร์แล้วอัปเดตข้อมูลในโค้ดโดยไม่อัปโหลดข้อมูล" />
-  <title>Skill Update FS · ประมวลผลในเบราว์เซอร์</title>
+  <meta name="description" content="ส่งข้อมูลการเงินและโค้ดที่เลือกให้ Codex ในเครื่องอัปเดตตามสกิล IR Financial HTML Updater" />
+  <title>Skill Update FS · Codex ในเครื่อง</title>
   <style>
     :root{color-scheme:light;--ink:#202c29;--muted:#74807c;--line:#e4e9e6;--paper:#f7f8f6;--green:#0a765d;--green-dark:#075944;--mint:#e9f3ee;--white:#fff;--soft:#fbfcfb;--shadow:0 12px 36px #1f342a08}
     *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);color:var(--ink);font:14px/1.55 "Segoe UI",Tahoma,sans-serif}button,input,select,textarea{font:inherit}button,a{-webkit-tap-highlight-color:transparent}
@@ -19,12 +19,12 @@
   </style>
 </head>
 <body>
-  <header class="topbar"><div class="top"><a class="brand" href="#top"><span class="mark">IR</span><span>Skill Update FS</span></a><span class="top-label">ประมวลผลในเบราว์เซอร์</span></div></header>
+  <header class="topbar"><div class="top"><a class="brand" href="#top"><span class="mark">IR</span><span>Skill Update FS</span></a><span class="top-label">ประมวลผลด้วย Codex ในเครื่อง</span></div></header>
   <main id="top">
     <section class="intro" aria-labelledby="page-title">
       <div class="eyebrow">Investor Relations · Financial updates</div>
       <h1 id="page-title">อัปเดต Financial จากไฟล์ต้นทาง</h1>
-      <p>เลือกไฟล์การเงินและวางโค้ด Financial Highlights หรือ Homepage KPI ระบบจะอัปเดตค่าจากไฟล์ลงในตารางและข้อมูลกราฟในโค้ด</p>
+      <p>เลือกไฟล์การเงินและวางโค้ด Financial Highlights จากนั้นให้ Codex ในเครื่องอ่านข้อมูลและอัปเดตโค้ดตามสกิล IR Financial HTML Updater</p>
       <div class="steps" aria-label="ขั้นตอนการทำงาน"><span class="step active"><b>1</b> เลือกไฟล์</span><span class="step-line"></span><span class="step"><b>2</b> อัปเดตโค้ด</span><span class="step-line"></span><span class="step"><b>3</b> คัดลอกผลลัพธ์</span></div>
     </section>
     <section class="workspace" aria-label="พื้นที่อัปเดตโค้ด">
@@ -37,8 +37,9 @@
             <div class="field"><label for="javascript-code">JavaScript (ถ้ามี)</label><textarea id="javascript-code" placeholder="วาง JavaScript เช่น window.chart หรือข้อมูล script ที่เกี่ยวข้อง"></textarea><div class="counter"><span id="js-count">0</span> ตัวอักษร · ระบบไม่รันโค้ดที่วาง</div></div>
           </div>
           <div class="field"><label for="source-file">ไฟล์การเงิน</label><label class="upload" for="source-file"><input id="source-file" type="file" accept=".xlsx,.csv,.tsv"><span class="filebox"><span class="file-icon">FILE</span><span><span class="file-name" id="file-name">เลือกไฟล์การเงินจากเครื่อง</span><span class="file-sub">รองรับ XLSX, CSV/TSV · อ่านไฟล์ในเบราว์เซอร์</span></span></span></label><div class="hint" id="source-status" role="status" aria-live="polite">ข้อมูลในไฟล์จะไม่ถูกอัปโหลด</div></div>
-          <div class="privacy"><strong>ประมวลผลในเบราว์เซอร์</strong>อ่านและตรวจไฟล์บนเครื่องของคุณเท่านั้น · ไม่มีการเชื่อมต่อ API หรืออัปโหลดข้อมูล</div>
-          <div class="actions"><button class="btn primary" id="update-code" type="button">อัปเดตโค้ดจากไฟล์</button><button class="btn quiet" id="clear" type="button">ล้างข้อมูล</button><span class="status" id="form-status" role="status" aria-live="polite"></span></div>
+          <div class="field"><label for="codex-token">เชื่อมต่อ Codex ในเครื่อง</label><div style="display:flex;gap:8px"><input id="codex-token" class="select" type="password" autocomplete="off" spellcheck="false" placeholder="วางรหัสที่แสดงในหน้าต่าง Codex Bridge" aria-describedby="codex-connection-status"><button class="btn quiet" id="connect-codex" type="button">เชื่อมต่อ</button></div><div class="hint" id="codex-connection-status" role="status" aria-live="polite">เปิด codex-bridge.mjs บนเครื่อง แล้วใส่รหัสจับคู่ที่แสดงใน terminal</div></div>
+          <div class="privacy"><strong>ข้อมูลที่จะส่งเมื่อกดอัปเดต</strong>ข้อมูลทุกชีตที่อ่านได้จากไฟล์ และโค้ด HTML/JavaScript ที่วาง จะส่งจากหน้าเว็บไปยัง Codex CLI บนเครื่อง แล้วประมวลผลผ่านบริการโมเดล OpenAI ด้วยบัญชี ChatGPT ที่ล็อกอินใน Codex · ไม่มีการใช้ API key</div>
+          <div class="actions"><button class="btn primary" id="update-code" type="button">ให้ Codex อัปเดตจากไฟล์</button><button class="btn quiet" id="clear" type="button">ล้างข้อมูล</button><span class="status" id="form-status" role="status" aria-live="polite"></span></div>
         </div>
       </article>
       <article class="panel" aria-labelledby="result-title">
@@ -47,7 +48,7 @@
           <div class="field output-field"><label for="html-result">HTML / Vue (อัปเดตแล้ว)</label><textarea id="html-result" placeholder="โค้ด HTML/Vue ที่อัปเดตแล้วจะแสดงที่นี่" readonly></textarea><div class="output-tools"><span class="hint">คัดลอกโค้ดฉบับอัปเดตไปแทนโค้ดเดิม</span><button class="btn copy" data-copy="html-result" disabled>คัดลอก HTML</button></div></div>
           <div class="field output-field"><label for="js-result">JavaScript (อัปเดตแล้ว)</label><textarea id="js-result" placeholder="โค้ด JavaScript ที่อัปเดตแล้วจะแสดงที่นี่" readonly></textarea><div class="output-tools"><span class="hint">คัดลอกโค้ดฉบับอัปเดตไปแทนโค้ดเดิม</span><button class="btn copy" data-copy="js-result" disabled>คัดลอก JavaScript</button></div></div>
           <div class="field output-field report"><label for="report-result">สรุปการอัปเดต</label><textarea id="report-result" placeholder="สรุปข้อมูลที่แทนลงในโค้ดจะแสดงที่นี่" readonly></textarea></div>
-          <div class="system-status"><strong>การทำงาน</strong><span>อัปเดตข้อมูล Financial ในตาราง HTML และกราฟ JavaScript ตามชื่อรายการที่ตรงกัน · ประมวลผลในเบราว์เซอร์ ไม่มีการเชื่อมต่อ API</span></div>
+          <div class="system-status"><strong>การทำงาน</strong><span>Codex ใช้สกิลในเครื่องอ่าน workbook ตรวจจุดที่ต้องอัปเดต และคืนโค้ดพร้อมรายการที่แก้และจุดที่จับคู่ไม่ได้</span></div>
         </div>
       </article>
     </section>
@@ -60,6 +61,11 @@
     const languageStatus=document.querySelector('#code-language');
     let sourceFile=null;
     let sourceData=null;
+    let codexConnected=false;
+    let codexToken='';
+    const codexEndpoint='http://127.0.0.1:43127';
+    const codexConnectionStatus=document.querySelector('#codex-connection-status');
+    const codexTokenInput=document.querySelector('#codex-token');
     htmlCode.addEventListener('input',()=>document.querySelector('#html-count').textContent=htmlCode.value.length.toLocaleString('th-TH'));
     jsCode.addEventListener('input',()=>document.querySelector('#js-count').textContent=jsCode.value.length.toLocaleString('th-TH'));
     const sourceInput=document.querySelector('#source-file');
@@ -118,58 +124,12 @@
     function textLocale(value){const text=plainText(String(value??''));if(/[\u0E00-\u0E7F]/.test(text))return 'TH';return /[A-Za-z]/.test(text)?'EN':'';}
     function detectCodeLocale(html,js){const declared=html.match(/\blang\s*=\s*(['"])(th|en)(?:-[^'"]*)?\1/i);if(declared)return declared[2].toUpperCase();const labels=[...html.matchAll(/<tr\b[^>]*>[\s\S]*?<\/tr>/gi)].map(row=>{const cell=row[0].match(/<(?:td|th)\b[^>]*>([\s\S]*?)<\/(?:td|th)>/i);return cell?plainText(cell[1]):'';}).filter(Boolean);labels.push(...[...js.matchAll(/(?:name|label)\s*:\s*(['"])([^'"]+)\1/gi)].map(match=>match[2]));const sample=labels.length?labels.join(' '):plainText(html);if(/[\u0E00-\u0E7F]/.test(sample))return 'TH';return /[A-Za-z]/.test(sample)?'EN':'';}
     function refreshDetectedLocale(){const locale=detectCodeLocale(htmlCode.value,jsCode.value);languageStatus.textContent=locale?`ตรวจพบ ${localeName(locale)} · จะอัปเดตเฉพาะภาษานี้`:'วางโค้ด HTML/Vue หรือ JavaScript เพื่อให้ระบบตรวจภาษา';return locale;}
-    function sourceGrids(data){
-      if(data.kind==='xlsx')return data.sheets.map(sheet=>({name:sheet.name,rows:sheet.rows.map(row=>{const cells=[];for(const cell of row.cells){const match=cell.ref.match(/^[A-Z]+/i);if(!match)continue;let col=0;for(const ch of match[0].toUpperCase())col=col*26+ch.charCodeAt(0)-64;cells[col-1]=String(cell.value??'');}return cells;} )}));
-      if(data.kind==='table')return [{name:'ไฟล์ต้นทาง',rows:data.rows}];
-      return [];
-    }
-    function updateHtmlTables(source,html,locale){
-      if(!html.trim())return {code:html,changes:[],inspected:[]};
-      const sourceRows=sourceGrids(source).flatMap(sheet=>sheet.rows.map((cells,index)=>({sheet:sheet.name,index,cells})).filter(row=>row.cells.length>1&&String(row.cells[0]??'').trim()));
-      const changes=[],matched=new Set(),inspected=new Set(),unmatched=[];
-      const code=html.replace(/<tr\b([^>]*)>([\s\S]*?)<\/tr>/gi,(row,attrs,inner)=>{
-        const cells=[...inner.matchAll(/<(td|th)\b([^>]*)>([\s\S]*?)<\/\1>/gi)];if(cells.length<2)return row;
-        const label=normalizeLabel(cells[0][3]);if(!label||textLocale(cells[0][3])!==locale)return row;
-        const candidates=sourceRows.filter(item=>normalizeLabel(item.cells[0])===label);if(candidates.length!==1){unmatched.push(`${plainText(cells[0][3])}${candidates.length>1?' (ชื่อซ้ำในไฟล์)':''}`);return row;}const sourceRow=candidates[0];
-        matched.add(sourceRow);inspected.add(plainText(cells[0][3]));let updated=inner;let offset=0;
-        for(let index=1;index<cells.length&&index<sourceRow.cells.length;index++){
-          const cell=cells[index],value=String(sourceRow.cells[index]??'');if(!value.trim())continue;
-          const existing=cell[3],formatted=formatLike(value,plainText(existing));
-          const replacement=replaceCellValue(existing,formatted);
-          if(replacement===existing)continue;
-          const start=cell.index+cell[0].indexOf('>')+1,end=cell.index+cell[0].lastIndexOf('</');
-          const from=start+offset,to=end+offset;updated=updated.slice(0,from)+replacement+updated.slice(to);offset+=replacement.length-existing.length;
-          changes.push({label:plainText(cells[0][3]),old:plainText(existing),value:formatted,source:`${sourceRow.sheet} แถว ${sourceRow.index+1}`});
-        }
-        return `<tr${attrs}>${updated}</tr>`;
-      });
-      return {code,changes,inspected:[...inspected],unmatched:[...new Set(unmatched)]};
-    }
-    function updateJsChartRows(source,js,locale){
-      const rows=sourceGrids(source).flatMap(sheet=>sheet.rows.map((cells,index)=>({sheet:sheet.name,index,cells})).filter(row=>row.cells.length>1&&String(row.cells[0]??'').trim())),changes=[],inspected=new Set(),unmatched=[];
-      const code=js.replace(/((?:name|label)\s*:\s*)(['"])([^'"]+)\2([\s\S]{0,300}?\bdata\s*:\s*)\[([^\]]*)\]/gi,(match,prefix,quote,label,dataPrefix,oldArray)=>{
-        if(textLocale(label)!==locale)return match;const candidates=rows.filter(item=>normalizeLabel(item.cells[0])===normalizeLabel(label));if(candidates.length!==1){unmatched.push(`${label}${candidates.length>1?' (ชื่อซ้ำในไฟล์)':''}`);return match;}const row=candidates[0];inspected.add(label);
-        const values=row.cells.slice(1).map(value=>String(value??'').trim()).filter(Boolean);if(!values.length)return match;
-        const next=values.map(value=>/^[-+]?\d+(?:\.\d+)?$/.test(value.replace(/,/g,''))?value.replace(/,/g,''):JSON.stringify(value)).join(', ');
-        if(next===oldArray.trim())return match;
-        changes.push({label,old:oldArray.trim(),value:next,source:`${row.sheet} แถว ${row.index+1}`});return `${prefix}${quote}${label}${quote}${dataPrefix}[${next}]`;
-      });
-      return {code,changes,inspected:[...inspected],unmatched:[...new Set(unmatched)]};
-    }
-    function formatLike(value,oldValue){
-      const raw=String(value).trim(),old=String(oldValue).trim();
-      if(!raw||!/^[-+]?\d[\d,]*(?:\.\d+)?%?$/.test(raw.replace(/\s/g,'')))return raw;
-      const number=Number(raw.replace(/,/g,'').replace(/%$/,''));if(!Number.isFinite(number))return raw;
-      if(old.endsWith('%')&&!raw.endsWith('%'))return `${number}%`;
-      const decimals=(old.match(/\.(\d+)/)||[])[1]?.length;if(decimals!==undefined)return number.toLocaleString('en-US',{minimumFractionDigits:decimals,maximumFractionDigits:Math.max(decimals,6)});
-      if(old.includes(',')||Math.abs(number)>=1000)return number.toLocaleString('en-US',{maximumFractionDigits:6});
-      return raw;
-    }
-    function replaceCellValue(inner,value){
-      if(/<counter-number\b/i.test(inner))return inner.replace(/(:number|number|:value|value)=(['"])[^'"]*\2/i,(_match,attr,quote)=>`${attr}=${quote}${value}${quote}`).replace(/(<counter-number\b[^>]*>)[\s\S]*?(<\/counter-number>)/i,(_match,open,close)=>`${open}${value}${close}`);
-      if(/<[^>]+>/.test(inner))return inner.replace(/>([^<>]*)</,(_match,left,right)=>`>${value}<`);
-      return value;
-    }
+    document.querySelector('#connect-codex').addEventListener('click',async()=>{
+      const token=codexTokenInput.value.trim();if(!token){codexConnectionStatus.textContent='ใส่รหัสจับคู่จากหน้าต่าง Codex Bridge ก่อน';return;}
+      codexConnectionStatus.textContent='กำลังตรวจการเชื่อมต่อกับ Codex ในเครื่อง…';
+      try{const response=await fetch(`${codexEndpoint}/health`,{cache:'no-store'});if(!response.ok)throw new Error('bridge ไม่พร้อม');const state=await response.json();if(!state.ready)throw new Error('bridge ไม่พร้อม');codexToken=token;codexConnected=true;codexConnectionStatus.textContent='เชื่อมต่อแล้ว · Codex CLI ในเครื่องพร้อมใช้งาน';codexConnectionStatus.style.color='var(--green)';}
+      catch{codexConnected=false;codexToken='';codexConnectionStatus.textContent='เชื่อมต่อไม่ได้ · เปิด Codex Bridge และอนุญาต Local Network ให้เว็บไซต์นี้';codexConnectionStatus.style.color='#a33d35';}
+    });
     sourceInput.addEventListener('change',async event=>{
       sourceFile=event.target.files[0]||null;sourceData=null;
       if(!sourceFile){setSourceStatus('ข้อมูลในไฟล์จะไม่ถูกอัปโหลด');return;}
@@ -184,17 +144,25 @@
       }catch(error){sourceData=null;setSourceStatus(`อ่านไฟล์ไม่ได้: ${error.message}`,true);}
     });
     htmlCode.addEventListener('input',refreshDetectedLocale);jsCode.addEventListener('input',refreshDetectedLocale);
-    document.querySelector('#update-code').addEventListener('click',()=>{
+    document.querySelector('#update-code').addEventListener('click',async()=>{
       if(!sourceFile||!sourceData){formStatus.textContent='เลือกไฟล์ต้นทางที่อ่านได้ก่อน';return;}
       const locale=refreshDetectedLocale();if(!locale){formStatus.textContent='ไม่พบภาษาในโค้ด กรุณาวาง HTML/Vue หรือ JavaScript ที่มีชื่อรายการก่อน';return;}
       if(!htmlCode.value.trim()&&!jsCode.value.trim()){formStatus.textContent='วางโค้ดที่ต้องการอัปเดตก่อน';return;}
-      const updated=updateHtmlTables(sourceData,htmlCode.value,locale),updatedJs=updateJsChartRows(sourceData,jsCode.value,locale);
-      const htmlResult=updated.code,jsResult=updatedJs.code,htmlChanges=updated.changes,jsChanges=updatedJs.changes;
-      document.querySelector('#html-result').value=htmlResult;document.querySelector('#js-result').value=jsResult;
-      document.querySelectorAll('[data-copy]').forEach(button=>button.disabled=false);
-      const changes=[...htmlChanges,...jsChanges],inspected=[...new Set([...updated.inspected,...updatedJs.inspected])],unmatched=[...new Set([...updated.unmatched,...updatedJs.unmatched])];
-      document.querySelector('#report-result').value=[`ไฟล์การเงิน: ${sourceFile.name}`,`ภาษาที่ตรวจพบ: ${localeName(locale)}`,`ตรวจพบจุดที่จับคู่กับไฟล์: ${inspected.length} จุด${inspected.length?` (${inspected.join(', ')})`:''}`,`อัปเดตโค้ด ${changes.length} จุด`,...changes.slice(0,100).map(item=>`• ${item.label}: ${item.old} → ${item.value} (${item.source})`),changes.length>100?`แสดง 100 จาก ${changes.length} จุด`:null,unmatched.length?`จุดที่ยังจับคู่ไม่ได้: ${unmatched.join(', ')}`:null,inspected.length?'':'ไม่พบจุดที่ตรงกัน: ตรวจชื่อแถวในคอลัมน์แรกของไฟล์ให้ตรงกับ label ในโค้ด'].filter(Boolean).join('\n');
-      formStatus.textContent=changes.length?`อัปเดตโค้ดแล้ว ${changes.length} จุด`:'ยังไม่มีจุดที่อัปเดต';
+      if(!codexConnected||!codexToken){formStatus.textContent='เชื่อมต่อ Codex ในเครื่องก่อน';return;}
+      const confirmed=window.confirm(`ส่งข้อมูลจากไฟล์ “${sourceFile.name}” และโค้ด HTML/JavaScript ที่วางให้ Codex CLI ในเครื่องประมวลผลหรือไม่?\n\nCodex จะส่งข้อมูลเหล่านี้ไปยังบริการโมเดล OpenAI ผ่านบัญชี ChatGPT ที่ล็อกอินอยู่ ไม่ใช้ API key`);
+      if(!confirmed)return;
+      const button=document.querySelector('#update-code');button.disabled=true;formStatus.textContent='กำลังส่งข้อมูลให้ Codex อ่านไฟล์และอัปเดตโค้ด…';
+      try{
+        const extension=sourceFile.name.split('.').pop().toLowerCase();
+        const response=await fetch(`${codexEndpoint}/update`,{method:'POST',headers:{'Content-Type':'application/json','Authorization':`Bearer ${codexToken}`},body:JSON.stringify({fileName:sourceFile.name,fileType:extension,language:locale,workbook:JSON.stringify(sourceData),html:htmlCode.value,javascript:jsCode.value})});
+        const result=await response.json();if(!response.ok)throw new Error(result.error||`เชื่อมต่อไม่สำเร็จ (${response.status})`);
+        document.querySelector('#html-result').value=result.html;document.querySelector('#js-result').value=result.javascript;
+        document.querySelectorAll('[data-copy]').forEach(copyButton=>copyButton.disabled=false);
+        const changes=result.changes||[],unmatched=result.unmatched||[],notes=result.notes||[];
+        document.querySelector('#report-result').value=[`ไฟล์การเงิน: ${sourceFile.name}`,`ภาษาที่ตรวจพบ: ${localeName(locale)}`,`Codex อัปเดต ${changes.length} จุด`,...changes.map(item=>`• ${item.item}: ${item.oldValue} → ${item.newValue} (${item.source})`),unmatched.length?`จุดที่ยังจับคู่ไม่ได้:\n${unmatched.map(item=>`• ${item}`).join('\n')}`:null,notes.length?`หมายเหตุ:\n${notes.map(item=>`• ${item}`).join('\n')}`:null].filter(Boolean).join('\n');
+        formStatus.textContent=`Codex อัปเดตเสร็จแล้ว ${changes.length} จุด · ตรวจผลลัพธ์ก่อนนำไปใช้`;
+      }catch(error){formStatus.textContent=`ประมวลผลไม่สำเร็จ: ${error.message}`;}
+      finally{button.disabled=false;}
     });
     document.querySelector('#clear').addEventListener('click',()=>{
       languageStatus.textContent='วางโค้ด HTML/Vue หรือ JavaScript เพื่อให้ระบบตรวจภาษา';
