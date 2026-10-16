@@ -1,0 +1,4 @@
+interface:
+  display_name: "Update FS Snippets"
+  short_description: "Verify file data and update CMS snippets"
+  default_prompt: "Use $skill-update-fs to ตรวจสอบข้อมูลจากไฟล์ที่ได้รับ แล้วอัปเดต CMS HTML/script snippet หรือทำรายงานจุดที่ไม่ตรง."
