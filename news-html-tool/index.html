@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f6f2">
+  <meta name="description" content="แปลงไฟล์ข่าว DOCX เป็น HTML ภาษาไทยและอังกฤษ พร้อมรักษารูปแบบข้อความจากต้นฉบับ">
+  <title>News to HTML · Skill Update FS</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../" aria-label="Skill Update FS">
+        <span class="brand-mark" aria-hidden="true">N</span>
+        <span>News to HTML</span>
+      </a>
+      <span class="privacy-chip"><span class="privacy-dot"></span> ประมวลผลในเบราว์เซอร์</span>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="intro">
+      <p class="eyebrow">UPDATE-NEWS · DOCX TO CMS</p>
+      <h1>แปลงข่าวจาก Word เป็น HTML</h1>
+      <p class="intro-copy">แยกเนื้อหาภาษาไทยและอังกฤษ พร้อมคงย่อหน้า ตัวหนา ตัวเอียง รายการ และลิงก์ตามต้นฉบับ</p>
+      <div class="workflow" aria-label="ขั้นตอน">
+        <span class="workflow-step active"><b>01</b> เลือกไฟล์</span>
+        <span class="workflow-rule"></span>
+        <span class="workflow-step"><b>02</b> ตรวจผลลัพธ์</span>
+        <span class="workflow-rule"></span>
+        <span class="workflow-step"><b>03</b> คัดลอก HTML</span>
+      </div>
+    </section>
+
+    <section class="workspace" aria-label="เครื่องมือแปลงข่าว">
+      <article class="panel upload-panel">
+        <div class="panel-heading">
+          <div><p class="section-kicker">SOURCE DOCUMENT</p><h2>ไฟล์ข่าว</h2></div>
+          <span class="heading-count" id="file-count">0 ไฟล์</span>
+        </div>
+        <div class="panel-content">
+          <label class="dropzone" id="dropzone" for="docx-files" tabindex="0">
+            <input id="docx-files" type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" multiple>
+            <span class="upload-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 16V4m0 0L7.5 8.5M12 4l4.5 4.5M5 14.5v3A2.5 2.5 0 0 0 7.5 20h9a2.5 2.5 0 0 0 2.5-2.5v-3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span class="drop-title">ลากไฟล์ DOCX มาวางที่นี่</span>
+            <span class="drop-subtitle">หรือ <span>เลือกไฟล์จากเครื่อง</span> · เลือกไฟล์ TH/EN พร้อมกันได้</span>
+          </label>
+
+          <div class="file-list" id="file-list" aria-live="polite"></div>
+
+          <div class="options">
+            <label class="check-row" for="skip-headline">
+              <input id="skip-headline" type="checkbox" checked>
+              <span class="check-custom" aria-hidden="true"></span>
+              <span><strong>ข้ามพาดหัวข่าว</strong><small>ตามกติกา update-news · ข้อความพาดหัวแสดงให้ตรวจได้ แต่ไม่รวมใน HTML</small></span>
+            </label>
+          </div>
+
+          <div class="privacy-note">
+            <span class="note-icon" aria-hidden="true">i</span>
+            <p><strong>ไฟล์อยู่บนเครื่องคุณ</strong><br>ระบบอ่านไฟล์ในเบราว์เซอร์และไม่อัปโหลดเนื้อหาไปยังเซิร์ฟเวอร์</p>
+          </div>
+
+          <div class="actions">
+            <button class="button primary" id="convert" type="button" disabled>แปลงเป็น HTML <span aria-hidden="true">→</span></button>
+            <button class="button secondary" id="clear" type="button" disabled>ล้างไฟล์</button>
+            <span class="status" id="status" role="status" aria-live="polite"></span>
+          </div>
+        </div>
+      </article>
+
+      <aside class="guide-card">
+        <div class="guide-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M7 3.75h7l4 4v12.5H7a2 2 0 0 1-2-2v-12.5a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M14 4v4h4M8 12h8M8 15h8M8 18h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </div>
+        <p class="section-kicker">FORMAT RULES</p>
+        <h2>รักษารูปแบบจากเอกสาร</h2>
+        <ul class="rule-list">
+          <li><span>✓</span> แยก HTML ตามภาษาที่ตรวจพบ</li>
+          <li><span>✓</span> คงตัวหนา ตัวเอียง และขีดเส้นใต้</li>
+          <li><span>✓</span> คงย่อหน้าและรายการจาก Word</li>
+          <li><span>✓</span> ลิงก์ทุกตัวเปิดแท็บใหม่</li>
+          <li><span>✓</span> ใส่ figure placeholder ด้านบน</li>
+        </ul>
+        <p class="guide-foot">ระบบไม่เรียบเรียงหรือแก้ไขถ้อยคำในเอกสาร</p>
+      </aside>
+    </section>
+
+    <section class="results" id="results" hidden>
+      <div class="results-heading">
+        <div><p class="section-kicker">GENERATED HTML</p><h2>ผลลัพธ์</h2></div>
+        <p class="results-hint">ตรวจเนื้อหาและคัดลอกโค้ดไปวางใน CMS</p>
+      </div>
+      <div class="result-cards" id="result-cards"></div>
+    </section>
+
+    <footer class="footer">
+      <span>Skill Update FS · Update News</span>
+      <a href="https://github.com/Thanakon-KN/skill-update-fs" target="_blank" rel="noopener noreferrer">GitHub repository <span aria-hidden="true">↗</span></a>
+    </footer>
+  </main>
+  <script src="app.js" defer></script>
+</body>
+</html>
